@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 /* Ngrx store */
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 // Imports for loading & configuring the in-memory web api
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -30,6 +32,11 @@ import { UserModule } from './user/user.module';
 
     /* initialize Ngrx store with an empty reducer */
     StoreModule.forRoot({}),
+    StoreDevtoolsModule.instrument({
+      name: 'APM Demo App DevTools',
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
   ],
   declarations: [
     AppComponent,
