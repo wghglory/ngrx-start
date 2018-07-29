@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 /* Ngrx store */
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 
@@ -32,6 +33,8 @@ import { UserModule } from './user/user.module';
 
     /* initialize Ngrx store with an empty reducer */
     StoreModule.forRoot({}),
+    /* Registering an Effect */
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       name: 'APM Demo App DevTools',
       maxAge: 25,
