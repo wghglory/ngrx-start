@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -19,6 +20,7 @@ import * as productActions from '../state/product.actions';
   styleUrls: ['./product-edit.component.scss'],
 })
 export class ProductEditComponent implements OnInit, OnDestroy {
+  componentActive = true;
   pageTitle = 'Product Edit';
   errorMessage = '';
   productForm: FormGroup;
@@ -70,9 +72,12 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     //   this.displayProduct(selectedProduct),
     // );
 
-    // TODO: Unsubscribe
+    // Unsubscribe by takeWhile
     this.store
-      .pipe(select(fromProduct.getCurrentProduct))
+      .pipe(
+        select(fromProduct.getCurrentProduct),
+        takeWhile(() => this.componentActive),
+      )
       .subscribe((currentProduct) => this.displayProduct(currentProduct));
 
     // Watch for value changes
@@ -83,6 +88,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // this.sub.unsubscribe();
+    this.componentActive = false;
   }
 
   // Also validate on blur
@@ -125,12 +131,11 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   deleteProduct() {
     if (this.product && this.product.id) {
       if (confirm(`Really delete the product: ${this.product.productName}?`)) {
-        this.productService
-          .deleteProduct(this.product.id)
-          .subscribe(
-            () => this.productService.changeSelectedProduct(null),
-            (err: any) => (this.errorMessage = err.error),
-          );
+        this.productService.deleteProduct(this.product.id).subscribe(() => {
+          // this.productService.changeSelectedProduct(null);
+
+          this.store.dispatch(new productActions.ClearCurrentProduct());
+        }, (err: any) => (this.errorMessage = err.error));
       }
     } else {
       // No need to delete, it was never saved

@@ -10,6 +10,8 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
 /* Ngrx store */
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './state/product.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { ProductEffects } from './state/product.effects';
 
 const productRoutes: Routes = [{ path: '', component: ProductShellComponent }];
 
@@ -20,6 +22,8 @@ const productRoutes: Routes = [{ path: '', component: ProductShellComponent }];
 
     /* register Ngrx store for features */
     StoreModule.forFeature('products', reducer),
+    /* Registering an Effect */
+    EffectsModule.forFeature([ProductEffects]),
   ],
   declarations: [ProductShellComponent, ProductListComponent, ProductEditComponent],
 })
