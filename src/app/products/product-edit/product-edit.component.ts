@@ -11,7 +11,7 @@ import { NumberValidators } from '../../shared/number.validator';
 
 /* NgRx */
 import { Store, select } from '@ngrx/store';
-import * as fromProduct from '../state/product.reducer';
+import * as fromProduct from '../state';
 import * as productActions from '../state/product.actions';
 
 @Component({
@@ -74,10 +74,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
     // Unsubscribe by takeWhile
     this.store
-      .pipe(
-        select(fromProduct.getCurrentProduct),
-        takeWhile(() => this.componentActive),
-      )
+      .pipe(select(fromProduct.getCurrentProduct), takeWhile(() => this.componentActive))
       .subscribe((currentProduct) => this.displayProduct(currentProduct));
 
     // Watch for changes to the error message
