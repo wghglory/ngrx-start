@@ -113,6 +113,7 @@ export class DeleteProductFail implements Action {
   constructor(public payload: string) {}
 }
 
+// Union the valid types
 export type ProductActions =
   | ToggleProductCode
   | SetCurrentProduct

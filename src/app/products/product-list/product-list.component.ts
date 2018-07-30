@@ -8,7 +8,7 @@ import { ProductService } from '../product.service';
 
 /* Ngrx store */
 import { Store, select } from '@ngrx/store';
-import * as fromProduct from '../state/product.reducer';
+import * as fromProduct from '../state';
 import * as productActions from '../state/product.actions';
 
 @Component({
@@ -33,10 +33,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Unsubscribe here because it does not use an async pipe
     this.store
-      .pipe(
-        select(fromProduct.getShowProductCode),
-        takeWhile(() => this.componentActive),
-      )
+      .pipe(select(fromProduct.getShowProductCode), takeWhile(() => this.componentActive))
       .subscribe((showProductCode) => {
         this.displayCode = showProductCode;
       });
@@ -47,10 +44,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     // Unsubscribe here because it does not use an async pipe
     this.store
-      .pipe(
-        select(fromProduct.getCurrentProduct),
-        takeWhile(() => this.componentActive),
-      )
+      .pipe(select(fromProduct.getCurrentProduct), takeWhile(() => this.componentActive))
       .subscribe((currentProduct) => (this.selectedProduct = currentProduct));
 
     this.store.dispatch(new productActions.Load());
